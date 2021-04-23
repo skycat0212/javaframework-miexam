@@ -17,8 +17,9 @@ public class UserDao {
         User user = null;
         try {
             connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("select * from userinfo2 where id = ?");
-            preparedStatement.setLong(1, id);
+
+            StatementStrategy statementStrategy = new GetStatementStrategy();
+            preparedStatement = statementStrategy.makePreparedStatement(id, connection);
 
             resultSet = preparedStatement.executeQuery();
 
@@ -54,9 +55,9 @@ public class UserDao {
         ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("insert into userinfo2 (name, password) values (?,?)", Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
+
+            StatementStrategy statementStrategy = new InsertStatementStrategy();
+            preparedStatement = statementStrategy.makePreparedStatement(user, connection);
 
             preparedStatement.executeUpdate();
 
@@ -90,10 +91,11 @@ public class UserDao {
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("update userinfo2 set name = ?, password = ? where id =?");
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setInt(3, user.getId());
+
+            StatementStrategy statementStrategy = new UpdateStatementStrategy();
+            preparedStatement = statementStrategy.makePreparedStatement(user, connection);
+
+
 
             preparedStatement.executeUpdate();
         } finally {
@@ -115,8 +117,9 @@ public class UserDao {
         PreparedStatement preparedStatement = null;
         try {
             connection = dataSource.getConnection();
-            preparedStatement = connection.prepareStatement("delete from userinfo2 where id = ?");
-            preparedStatement.setInt(1, id);
+
+            StatementStrategy statementStrategy = new DeleteStatementStrategy();
+            preparedStatement = statementStrategy.makePreparedStatement(id, connection);
 
             preparedStatement.executeUpdate();
         } finally {
