@@ -11,11 +11,13 @@ import static org.hamcrest.core.Is.is;
 
 public class UserDaoTests {
     @Test
-    public void jejuGet() throws SQLException, ClassNotFoundException {
+    public void get() throws SQLException, ClassNotFoundException {
         Integer id = 1;
         String name = "hulk";
         String password = "1234";
-        UserDao userDao = new UserDao(new JejuConnectionMaker());
+
+        DaoFactory daoFactory = new DaoFactory();
+        UserDao userDao = daoFactory.getUserDao();
         User user = userDao.get(id);
         assertThat(user.getId(), is(id));
         assertThat(user.getName(), is(name));
@@ -23,7 +25,7 @@ public class UserDaoTests {
     }
 
     @Test
-    public void jejuInsert() throws SQLException, ClassNotFoundException {
+    public void insert() throws SQLException, ClassNotFoundException {
         String name = "헐크";
         String password = "1592";
 
@@ -31,7 +33,8 @@ public class UserDaoTests {
         user.setName(name);
         user.setPassword(password);
 
-        UserDao userDao = new UserDao(new JejuConnectionMaker());
+        DaoFactory daoFactory = new DaoFactory();
+        UserDao userDao = daoFactory.getUserDao();
         userDao.insert(user);
 
         assertThat(user.getId(), greaterThan(0));
@@ -44,37 +47,37 @@ public class UserDaoTests {
 
     }
 
-    @Test
-    public void hallaGet() throws SQLException, ClassNotFoundException {
-        Integer id = 1;
-        String name = "hulk";
-        String password = "1234";
-        UserDao userDao = new UserDao(new HallaConnectionMaker());
-        User user = userDao.get(id);
-        assertThat(user.getId(), is(id));
-        assertThat(user.getName(), is(name));
-        assertThat(user.getPassword(), is(password));
-    }
-
-    @Test
-    public void hallaInsert() throws SQLException, ClassNotFoundException {
-        String name = "헐크";
-        String password = "1592";
-
-        User user = new User();
-        user.setName(name);
-        user.setPassword(password);
-
-        UserDao userDao = new UserDao(new HallaConnectionMaker());
-        userDao.insert(user);
-
-        assertThat(user.getId(), greaterThan(0));
-
-        User insertedUser = userDao.get(user.getId());
-
-        assertThat(insertedUser.getId(), is(user.getId()));
-        assertThat(insertedUser.getName(), is(user.getName()));
-        assertThat(insertedUser.getPassword(), is(user.getPassword()));
-
-    }
+//    @Test
+//    public void hallaGet() throws SQLException, ClassNotFoundException {
+//        Integer id = 1;
+//        String name = "hulk";
+//        String password = "1234";
+//        UserDao userDao = new UserDao(new HallaConnectionMaker());
+//        User user = userDao.get(id);
+//        assertThat(user.getId(), is(id));
+//        assertThat(user.getName(), is(name));
+//        assertThat(user.getPassword(), is(password));
+//    }
+//
+//    @Test
+//    public void hallaInsert() throws SQLException, ClassNotFoundException {
+//        String name = "헐크";
+//        String password = "1592";
+//
+//        User user = new User();
+//        user.setName(name);
+//        user.setPassword(password);
+//
+//        UserDao userDao = new UserDao(new HallaConnectionMaker());
+//        userDao.insert(user);
+//
+//        assertThat(user.getId(), greaterThan(0));
+//
+//        User insertedUser = userDao.get(user.getId());
+//
+//        assertThat(insertedUser.getId(), is(user.getId()));
+//        assertThat(insertedUser.getName(), is(user.getName()));
+//        assertThat(insertedUser.getPassword(), is(user.getPassword()));
+//
+//    }
 }
